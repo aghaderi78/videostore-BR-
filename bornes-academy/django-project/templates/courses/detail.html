@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% block title %}{{ course.title }} — برنس آکادمی{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'courses:home' %}">دوره‌ها</a></li>
+            <li class="breadcrumb-item active">{{ course.title }}</li>
+        </ol>
+    </nav>
+
+    <div class="row g-5">
+        <div class="col-lg-8">
+            {% if course.thumbnail %}
+            <img src="{{ course.thumbnail.url }}" class="img-fluid rounded-3 mb-4 w-100" style="max-height:380px;object-fit:cover;" alt="{{ course.title }}">
+            {% endif %}
+
+            <h1 class="fw-bold mb-3">{{ course.title }}</h1>
+
+            <div class="d-flex flex-wrap gap-3 mb-4 text-muted">
+                <span><i class="fas fa-chalkboard-teacher me-1 text-primary"></i>{{ course.instructor }}</span>
+                <span><i class="fas fa-clock me-1 text-primary"></i>{{ course.duration_hours }} ساعت</span>
+                <span><i class="fas fa-layer-group me-1 text-primary"></i>{{ course.lesson_count }} جلسه</span>
+                <span><i class="fas fa-signal me-1 text-primary"></i>{{ course.get_level_display }}</span>
+            </div>
+
+            <div class="card p-4 mb-4">
+                <h5 class="fw-bold mb-3">درباره این دوره</h5>
+                <p class="text-secondary lh-lg">{{ course.description }}</p>
+            </div>
+
+            <h4 class="fw-bold mb-3">سرفصل‌های دوره</h4>
+            <div class="accordion" id="lessonsAccordion">
+                {% for lesson in lessons %}
+                <div class="accordion-item border mb-2 rounded">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button {% if not forloop.first %}collapsed{% endif %} fw-medium" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#lesson{{ lesson.id }}">
+                            <span class="badge bg-primary me-2">{{ lesson.order }}</span>
+                            {{ lesson.title }}
+                            {% if lesson.is_preview %}
+                            <span class="badge bg-success ms-auto me-2">رایگان</span>
+                            {% endif %}
+                            {% if lesson.duration_minutes %}
+                            <small class="text-muted ms-auto me-2">{{ lesson.duration_minutes }} دقیقه</small>
+                            {% endif %}
+                        </button>
+                    </h2>
+                    <div id="lesson{{ lesson.id }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}">
+                        <div class="accordion-body text-muted">
+                            {% if lesson.description %}
+                            <p>{{ lesson.description }}</p>
+                            {% endif %}
+                            {% if enrollment and enrollment.is_paid %}
+                                {% if lesson.video_url %}
+                                <a href="{{ lesson.video_url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-play me-1"></i>مشاهده ویدیو
+                                </a>
+                                {% endif %}
+                            {% elif lesson.is_preview %}
+                                {% if lesson.video_url %}
+                                <a href="{{ lesson.video_url }}" target="_blank" class="btn btn-sm btn-outline-success">
+                                    <i class="fas fa-play me-1"></i>مشاهده پیش‌نمایش رایگان
+                                </a>
+                                {% endif %}
+                            {% else %}
+                            <span class="text-muted"><i class="fas fa-lock me-1"></i>برای مشاهده این جلسه دوره را خریداری کنید</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card p-4 sticky-top" style="top: 80px;">
+                {% if course.is_free %}
+                <div class="text-center mb-3">
+                    <span class="free-tag display-6">رایگان</span>
+                </div>
+                {% else %}
+                <div class="text-center mb-3">
+                    <span class="price-tag display-6">{{ course.formatted_price }}</span>
+                    <div class="text-muted">تومان</div>
+                </div>
+                {% endif %}
+
+                {% if enrollment %}
+                    {% if enrollment.is_paid %}
+                    <div class="alert alert-success text-center">
+                        <i class="fas fa-check-circle fa-2x mb-2 d-block"></i>
+                        <strong>شما در این دوره ثبت‌نام کرده‌اید</strong>
+                    </div>
+                    {% elif enrollment.is_pending %}
+                    <div class="alert alert-warning text-center">
+                        <i class="fas fa-clock fa-2x mb-2 d-block"></i>
+                        <strong>در انتظار پرداخت</strong>
+                    </div>
+                    <a href="{% url 'courses:payment' enrollment.id %}" class="btn btn-warning w-100 btn-lg fw-bold">
+                        تکمیل پرداخت
+                    </a>
+                    {% elif enrollment.is_expired %}
+                    <div class="alert alert-danger text-center">
+                        <i class="fas fa-times-circle fa-2x mb-2 d-block"></i>
+                        <strong>مهلت پرداخت منقضی شد</strong>
+                    </div>
+                    <a href="{% url 'courses:enroll' course.slug %}" class="btn btn-primary w-100 btn-lg fw-bold">
+                        ثبت‌نام مجدد
+                    </a>
+                    {% endif %}
+                {% elif user.is_authenticated %}
+                <a href="{% url 'courses:enroll' course.slug %}" class="btn btn-primary w-100 btn-lg btn-buy fw-bold">
+                    <i class="fas fa-cart-plus me-2"></i>
+                    {% if course.is_free %}ثبت‌نام رایگان{% else %}خرید دوره{% endif %}
+                </a>
+                {% else %}
+                <a href="{% url 'accounts:send_otp' %}?next={{ request.path }}" class="btn btn-primary w-100 btn-lg btn-buy fw-bold">
+                    <i class="fas fa-sign-in-alt me-2"></i>ورود و خرید
+                </a>
+                {% endif %}
+
+                <hr>
+                <ul class="list-unstyled text-muted">
+                    <li class="mb-2"><i class="fas fa-user-tie me-2 text-primary"></i>مدرس: {{ course.instructor }}</li>
+                    <li class="mb-2"><i class="fas fa-clock me-2 text-primary"></i>{{ course.duration_hours }} ساعت آموزش</li>
+                    <li class="mb-2"><i class="fas fa-layer-group me-2 text-primary"></i>{{ course.lesson_count }} جلسه</li>
+                    <li class="mb-2"><i class="fas fa-signal me-2 text-primary"></i>سطح: {{ course.get_level_display }}</li>
+                    <li class="mb-2"><i class="fas fa-infinity me-2 text-primary"></i>دسترسی مادام‌العمر</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

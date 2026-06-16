@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}تأیید کد — برنس آکادمی{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5 col-lg-4">
+            <div class="card p-4 shadow">
+                <div class="text-center mb-4">
+                    <i class="fas fa-sms fa-3x text-primary mb-3"></i>
+                    <h3 class="fw-bold">تأیید شماره موبایل</h3>
+                    <p class="text-muted">کد ۶ رقمی ارسال شده به</p>
+                    <p class="fw-bold text-primary fs-5" dir="ltr">{{ mobile }}</p>
+                </div>
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {{ form.mobile }}
+                    <div class="mb-4">
+                        <label class="form-label fw-medium">{{ form.code.label }}</label>
+                        {{ form.code }}
+                        {% if form.code.errors %}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.code.errors %}{{ error }}{% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 btn-lg fw-bold">
+                        <i class="fas fa-check me-2"></i>تأیید و ورود
+                    </button>
+                </form>
+
+                <div class="text-center mt-3">
+                    <p class="text-muted small mb-1">کد را دریافت نکردید؟</p>
+                    <a href="{% url 'accounts:resend_otp' %}" class="text-decoration-none">
+                        <i class="fas fa-redo me-1"></i>ارسال مجدد کد
+                    </a>
+                </div>
+
+                <div class="text-center mt-2">
+                    <a href="{% url 'accounts:send_otp' %}" class="text-muted small">
+                        <i class="fas fa-arrow-right me-1"></i>تغییر شماره موبایل
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+let seconds = 60;
+function countdown() {
+    let el = document.getElementById('timer');
+    if (!el) return;
+    if (seconds > 0) {
+        el.textContent = seconds + ' ثانیه';
+        seconds--;
+        setTimeout(countdown, 1000);
+    } else {
+        el.parentElement.innerHTML = '<a href="{% url 'accounts:resend_otp' %}" class="text-decoration-none"><i class="fas fa-redo me-1"></i>ارسال مجدد</a>';
+    }
+}
+countdown();
+</script>
+{% endblock %}
+{% endblock %}

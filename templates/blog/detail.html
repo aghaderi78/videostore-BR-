@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block title %}{{ post.title }} — برنس آکادمی{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'courses:home' %}">خانه</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'blog:list' %}">مقالات</a></li>
+            <li class="breadcrumb-item active">{{ post.title|truncatechars:40 }}</li>
+        </ol>
+    </nav>
+
+    <div class="row g-5">
+        <div class="col-lg-8">
+            {% if post.cover_image %}
+            <img src="{{ post.cover_image.url }}" class="img-fluid w-100 rounded-3 mb-4" style="max-height:400px;object-fit:cover;" alt="{{ post.title }}">
+            {% endif %}
+
+            {% if post.category %}
+            <span class="badge bg-primary mb-3">
+                <i class="{{ post.category.icon }} me-1"></i>{{ post.category.name }}
+            </span>
+            {% endif %}
+            <h1 class="fw-bold mb-3">{{ post.title }}</h1>
+            <div class="d-flex flex-wrap gap-3 text-muted mb-4 pb-3 border-bottom">
+                <span><i class="fas fa-user me-1 text-primary"></i>{{ post.author }}</span>
+                <span><i class="fas fa-calendar me-1 text-primary"></i>{{ post.published_at|date:"Y/m/d" }}</span>
+                <span><i class="fas fa-clock me-1 text-primary"></i>{{ post.reading_time }} دقیقه مطالعه</span>
+                <span><i class="fas fa-eye me-1 text-primary"></i>{{ post.views_count }} بازدید</span>
+            </div>
+
+            <div class="post-content lh-lg text-secondary" style="font-size:1.05rem;">
+                {{ post.content|linebreaks }}
+            </div>
+
+            {% if related %}
+            <div class="mt-5">
+                <h4 class="fw-bold mb-4">مقالات مرتبط</h4>
+                <div class="row g-3">
+                    {% for rpost in related %}
+                    <div class="col-md-4">
+                        <div class="card h-100 p-3">
+                            <h6 class="fw-bold">{{ rpost.title|truncatechars:50 }}</h6>
+                            <p class="text-muted small flex-grow-1">{{ rpost.excerpt|truncatechars:80 }}</p>
+                            <a href="{{ rpost.get_absolute_url }}" class="btn btn-sm btn-outline-primary">بیشتر بخوانید</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card p-4 sticky-top" style="top:80px;">
+                <h6 class="fw-bold mb-3">درباره نویسنده</h6>
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3"
+                         style="width:52px;height:52px;flex-shrink:0;">
+                        <i class="fas fa-user-tie text-white fa-lg"></i>
+                    </div>
+                    <div>
+                        <div class="fw-bold">{{ post.author }}</div>
+                        <small class="text-muted">مدرس و نویسنده</small>
+                    </div>
+                </div>
+                <hr>
+                <h6 class="fw-bold mb-3">دوره‌های مرتبط</h6>
+                {% load blog_extras %}
+                {% featured_courses as featured %}
+                {% for course in featured|slice:":3" %}
+                <a href="{{ course.get_absolute_url }}" class="d-flex align-items-center mb-3 text-decoration-none">
+                    <div class="bg-success rounded-3 d-flex align-items-center justify-content-center me-2 flex-shrink-0"
+                         style="width:36px;height:36px;">
+                        <i class="fas fa-play text-white small"></i>
+                    </div>
+                    <div>
+                        <div class="fw-medium text-dark" style="font-size:0.85rem;">{{ course.title|truncatechars:35 }}</div>
+                        <small class="text-success">{{ course.formatted_price }} تومان</small>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

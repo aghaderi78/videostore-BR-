@@ -1,0 +1,342 @@
+/* ═══════════════════════════════════════════════════════
+   برنس آکادمی — پالت رنگی طلایی / زیتونی / شیری
+   ═══════════════════════════════════════════════════════ */
+
+/* ─── متغیرهای رنگی ─────────────────────────────────── */
+:root {
+    --gold:        #C9A227;
+    --gold-dark:   #A0811E;
+    --gold-light:  #E8C86A;
+    --olive:       #5C6E2E;
+    --olive-dark:  #3D4A1E;
+    --olive-light: #7A8F40;
+    --cream:       #FBF7EE;
+    --cream-dark:  #F3EDD8;
+    --white:       #FFFFFF;
+    --text-dark:   #2C2410;
+    --text-mid:    #5C5040;
+    --text-light:  #8C7C68;
+    --shadow-gold: rgba(201,162,39,0.18);
+    --shadow-olive:rgba(92,110,46,0.15);
+}
+
+/* ─── پایه ──────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    font-family: 'Vazirmatn', 'Vazir', Tahoma, sans-serif;
+    background-color: var(--cream);
+    color: var(--text-dark);
+    direction: rtl;
+}
+
+/* ─── لغو Bootstrap های آبی ─────────────────────────── */
+.btn-primary {
+    background-color: var(--gold) !important;
+    border-color: var(--gold-dark) !important;
+    color: #fff !important;
+    font-weight: 600;
+    border-radius: 10px;
+    transition: all .22s ease;
+}
+.btn-primary:hover, .btn-primary:focus {
+    background-color: var(--gold-dark) !important;
+    border-color: var(--gold-dark) !important;
+    box-shadow: 0 4px 14px var(--shadow-gold) !important;
+    transform: translateY(-1px);
+}
+.btn-outline-primary {
+    border-color: var(--gold) !important;
+    color: var(--gold) !important;
+    border-radius: 10px;
+    font-weight: 600;
+}
+.btn-outline-primary:hover {
+    background-color: var(--gold) !important;
+    color: #fff !important;
+}
+.btn-success {
+    background-color: var(--olive) !important;
+    border-color: var(--olive-dark) !important;
+    color: #fff !important;
+    font-weight: 600;
+    border-radius: 10px;
+    transition: all .22s ease;
+}
+.btn-success:hover, .btn-success:focus {
+    background-color: var(--olive-dark) !important;
+    box-shadow: 0 4px 14px var(--shadow-olive) !important;
+    transform: translateY(-1px);
+}
+.btn-outline-success {
+    border-color: var(--olive) !important;
+    color: var(--olive) !important;
+    border-radius: 10px;
+    font-weight: 600;
+}
+.btn-outline-success:hover {
+    background-color: var(--olive) !important;
+    color: #fff !important;
+}
+.bg-primary  { background-color: var(--gold)  !important; }
+.bg-success  { background-color: var(--olive) !important; }
+.text-primary { color: var(--gold)  !important; }
+.text-success { color: var(--olive) !important; }
+.border-primary { border-color: var(--gold)  !important; }
+.badge.bg-primary { background-color: var(--gold) !important; }
+.badge.bg-success { background-color: var(--olive)!important; }
+
+/* ─── نوار ناوبری ────────────────────────────────────── */
+.navbar {
+    background-color: var(--white) !important;
+    border-bottom: 2px solid var(--cream-dark);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.navbar-brand {
+    font-weight: 800;
+    font-size: 1.35rem;
+    color: var(--gold-dark) !important;
+}
+.navbar-brand .brand-icon {
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+}
+.nav-link {
+    font-weight: 500;
+    color: var(--text-mid) !important;
+    border-radius: 8px;
+    padding: 6px 14px !important;
+    transition: all .18s;
+}
+.nav-link:hover {
+    color: var(--gold-dark) !important;
+    background-color: var(--cream-dark);
+}
+.btn-nav-login {
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark)) !important;
+    color: #fff !important;
+    border-radius: 10px;
+    padding: 7px 20px !important;
+    font-weight: 700;
+    border: none !important;
+}
+.btn-nav-login:hover {
+    background: linear-gradient(135deg, var(--gold-dark), var(--olive-dark)) !important;
+    box-shadow: 0 4px 12px var(--shadow-gold);
+}
+
+/* سبد خرید */
+.cart-btn {
+    background-color: var(--olive) !important;
+    color: #fff !important;
+    border-color: var(--olive) !important;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all .22s;
+}
+.cart-btn:hover {
+    background-color: var(--olive-dark) !important;
+    box-shadow: 0 4px 12px var(--shadow-olive);
+}
+.cart-badge {
+    background: var(--gold) !important;
+    color: #fff;
+    border-radius: 50%;
+    width: 18px; height: 18px;
+    font-size: .65rem;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    position: absolute;
+    top: -6px; left: -6px;
+}
+
+/* ─── کارت‌ها ────────────────────────────────────────── */
+.card {
+    border: 1.5px solid var(--cream-dark) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 2px 14px rgba(0,0,0,0.06);
+    background-color: var(--white);
+    transition: transform .22s, box-shadow .22s;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px var(--shadow-gold) !important;
+    border-color: var(--gold-light) !important;
+}
+.course-thumbnail {
+    height: 200px;
+    object-fit: cover;
+    border-radius: 14px 14px 0 0;
+}
+
+/* ─── هیرو ────────────────────────────────────────────── */
+.hero-section {
+    background: linear-gradient(135deg, var(--olive-dark) 0%, var(--olive) 50%, var(--gold-dark) 100%);
+    color: var(--white);
+    padding: 90px 0;
+    position: relative;
+    overflow: hidden;
+}
+.hero-section::before {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    background: rgba(201,162,39,0.12);
+    border-radius: 50%;
+    top: -140px; right: -120px;
+    pointer-events: none;
+}
+.hero-section::after {
+    content: '';
+    position: absolute;
+    width: 250px; height: 250px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50%;
+    bottom: -80px; left: -80px;
+    pointer-events: none;
+}
+
+/* ─── قیمت ───────────────────────────────────────────── */
+.price-tag {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--olive);
+}
+.free-tag {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--gold);
+}
+
+/* ─── هدر بخش‌ها ──────────────────────────────────────── */
+.section-title {
+    font-weight: 800;
+    font-size: 1.7rem;
+    color: var(--text-dark);
+    position: relative;
+    padding-bottom: 14px;
+    margin-bottom: 32px;
+}
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 54px; height: 4px;
+    background: linear-gradient(90deg, var(--gold), var(--olive-light));
+    border-radius: 2px;
+}
+
+/* ─── Alert ها ───────────────────────────────────────── */
+.alert {
+    border: none;
+    border-radius: 12px;
+    border-right: 4px solid;
+}
+.alert-success { border-color: var(--olive); background-color: #f0f4e8; color: var(--olive-dark); }
+.alert-warning { border-color: var(--gold);  background-color: #fdf7e3; color: var(--gold-dark);  }
+.alert-info    { border-color: #5b9bd5;     background-color: #eaf3fb; color: #1a4971; }
+.alert-danger  { border-color: #c0392b;     background-color: #fdf0ee; color: #922b21; }
+
+/* ─── Badge ها ───────────────────────────────────────── */
+.badge {
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-weight: 600;
+}
+
+/* ─── فرم ها ──────────────────────────────────────────── */
+.form-control, .form-select {
+    border: 1.5px solid var(--cream-dark);
+    border-radius: 10px;
+    padding: 10px 14px;
+    background-color: var(--white);
+    transition: border-color .2s, box-shadow .2s;
+}
+.form-control:focus, .form-select:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201,162,39,0.15);
+    outline: none;
+}
+.otp-bigbox {
+    font-size: 2.4rem;
+    letter-spacing: 0.9rem;
+    text-align: center;
+    font-weight: 800;
+    color: var(--text-dark);
+    border: 2px solid var(--gold);
+    background-color: var(--cream);
+    border-radius: 12px;
+    padding: 14px;
+}
+.otp-bigbox:focus {
+    border-color: var(--gold-dark);
+    box-shadow: 0 0 0 4px rgba(201,162,39,0.15);
+}
+
+/* ─── Accordion ──────────────────────────────────────── */
+.accordion-button:not(.collapsed) {
+    background-color: var(--cream-dark);
+    color: var(--text-dark);
+    box-shadow: none;
+}
+.accordion-button:not(.collapsed)::after {
+    filter: brightness(0.5) sepia(1) hue-rotate(10deg);
+}
+.accordion-button:focus { box-shadow: 0 0 0 3px rgba(201,162,39,0.2); }
+
+/* ─── فوتر ───────────────────────────────────────────── */
+footer {
+    background: linear-gradient(180deg, #1e1a0f 0%, #2a2210 100%);
+    color: #b8a88a;
+}
+footer h5, footer h6 { color: var(--gold-light); }
+footer a:hover { color: var(--gold-light) !important; }
+footer hr { border-color: rgba(201,162,39,0.2); }
+
+/* ─── تیبل ───────────────────────────────────────────── */
+.table thead { background-color: var(--cream-dark); }
+.table > :not(:first-child) { border-top: 1px solid var(--cream-dark); }
+
+/* ─── اسکرول‌بار ──────────────────────────────────────── */
+::-webkit-scrollbar { width: 7px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--gold-light); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold-dark); }
+
+/* ─── انیمیشن ────────────────────────────────────────── */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in-up { animation: fadeInUp .45s ease both; }
+
+/* ─── کارت احراز هویت ────────────────────────────────── */
+.auth-card {
+    border-top: 4px solid var(--gold) !important;
+    max-width: 440px;
+    margin: auto;
+}
+.auth-icon-wrap {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    display: inline-flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 16px var(--shadow-gold);
+}
+
+/* ─── Dropdown ───────────────────────────────────────── */
+.dropdown-menu {
+    border: 1.5px solid var(--cream-dark);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+.dropdown-item:hover { background-color: var(--cream-dark); color: var(--gold-dark); }
+
+/* ─── وضعیت پرداخت ───────────────────────────────────── */
+.status-paid    { color: var(--olive); font-weight: 700; }
+.status-pending { color: var(--gold);  font-weight: 700; }
+.status-expired { color: #c0392b;      font-weight: 700; }
+
+/* ─── پیوند ها ───────────────────────────────────────── */
+a { color: var(--gold-dark); }
+a:hover { color: var(--olive); }
+.text-decoration-none { text-decoration: none !important; }

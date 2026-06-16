@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block title %}پروفایل من — برنس آکادمی{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="fw-bold mb-4"><i class="fas fa-user-circle me-2 text-primary"></i>پروفایل من</h2>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card p-4">
+                <h5 class="fw-bold mb-3">اطلاعات حساب</h5>
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                        <div class="invalid-feedback d-block">
+                            {% for error in field.errors %}{{ error }}{% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">شماره موبایل</label>
+                        <input type="text" class="form-control" value="{{ user.mobile }}" readonly dir="ltr">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 fw-bold">
+                        <i class="fas fa-save me-2"></i>ذخیره تغییرات
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card p-4">
+                <h5 class="fw-bold mb-3">دوره‌های من</h5>
+                {% if enrollments %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>دوره</th>
+                                <th>وضعیت</th>
+                                <th>تاریخ ثبت‌نام</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for enrollment in enrollments %}
+                            <tr>
+                                <td>
+                                    <a href="{{ enrollment.course.get_absolute_url }}" class="text-decoration-none fw-medium">
+                                        {{ enrollment.course.title }}
+                                    </a>
+                                </td>
+                                <td>
+                                    {% if enrollment.is_paid %}
+                                    <span class="badge bg-success">پرداخت شده</span>
+                                    {% elif enrollment.is_pending %}
+                                    <span class="badge bg-warning text-dark">در انتظار پرداخت</span>
+                                    {% elif enrollment.is_expired %}
+                                    <span class="badge bg-danger">منقضی شده</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">{{ enrollment.get_status_display }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ enrollment.enrolled_at|date:"Y/m/d" }}</td>
+                                <td>
+                                    {% if enrollment.is_pending %}
+                                    <a href="{% url 'courses:payment' enrollment.id %}" class="btn btn-sm btn-warning fw-bold">
+                                        پرداخت
+                                    </a>
+                                    {% elif enrollment.is_paid %}
+                                    <a href="{{ enrollment.course.get_absolute_url }}" class="btn btn-sm btn-success">
+                                        مشاهده
+                                    </a>
+                                    {% else %}
+                                    <a href="{{ enrollment.course.get_absolute_url }}" class="btn btn-sm btn-outline-secondary">
+                                        جزئیات
+                                    </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-4 text-muted">
+                    <i class="fas fa-book-open fa-3x mb-3"></i>
+                    <p>شما هنوز در هیچ دوره‌ای ثبت‌نام نکرده‌اید</p>
+                    <a href="{% url 'courses:home' %}" class="btn btn-primary">مشاهده دوره‌ها</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

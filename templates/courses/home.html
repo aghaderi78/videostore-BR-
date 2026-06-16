@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% block title %}دوره‌های آموزشی — برنس آکادمی{% endblock %}
+
+{% block content %}
+<!-- هیرو -->
+<section class="hero-section">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold mb-3">یادگیری حرفه‌ای با<br>برنس آکادمی</h1>
+        <p class="lead mb-5 opacity-90">دوره‌های آموزشی عملی در حوزه برنامه‌نویسی و فناوری اطلاعات</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="#courses" class="btn btn-light btn-lg fw-bold px-5">
+                <i class="fas fa-book me-2"></i>مشاهده دوره‌ها
+            </a>
+            <a href="{% url 'blog:list' %}" class="btn btn-outline-light btn-lg px-5">
+                <i class="fas fa-newspaper me-2"></i>مقالات آموزشی
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- آمار -->
+<section class="py-4 bg-white shadow-sm">
+    <div class="container">
+        <div class="row text-center g-3">
+            <div class="col-6 col-md-3">
+                <div class="py-2">
+                    <div class="fw-bold fs-3 text-primary">{{ courses|length }}+</div>
+                    <div class="text-muted small">دوره آموزشی</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="py-2">
+                    <div class="fw-bold fs-3 text-success">۵۰۰+</div>
+                    <div class="text-muted small">دانشجو</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="py-2">
+                    <div class="fw-bold fs-3 text-warning">۱۰۰+</div>
+                    <div class="text-muted small">ساعت آموزش</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="py-2">
+                    <div class="fw-bold fs-3 text-danger">۴.۸</div>
+                    <div class="text-muted small">امتیاز میانگین</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- دوره‌ها -->
+<section id="courses" class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="section-title mb-0">دوره‌های آموزشی</h2>
+            <span class="text-muted small">{{ courses|length }} دوره موجود</span>
+        </div>
+
+        {% if courses %}
+        <div class="row g-4">
+            {% for course in courses %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100">
+                    {% if course.thumbnail %}
+                    <img src="{{ course.thumbnail.url }}" class="course-thumbnail" alt="{{ course.title }}">
+                    {% else %}
+                    <div class="course-thumbnail d-flex align-items-center justify-content-center"
+                         style="background:linear-gradient(135deg,#e8f0fe 0%,#c2d4f8 100%);">
+                        <i class="fas fa-play-circle fa-4x text-primary opacity-50"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body d-flex flex-column p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-primary">{{ course.get_level_display }}</span>
+                            <small class="text-muted"><i class="fas fa-clock me-1"></i>{{ course.duration_hours }}h</small>
+                        </div>
+                        <h5 class="card-title fw-bold mb-2">{{ course.title }}</h5>
+                        <p class="card-text text-muted small flex-grow-1 mb-3">{{ course.description|truncatechars:110 }}</p>
+                        <div class="d-flex align-items-center gap-2 mb-3 text-muted small">
+                            <i class="fas fa-user-tie text-primary"></i>
+                            <span>{{ course.instructor }}</span>
+                            <span class="ms-auto"><i class="fas fa-layer-group me-1"></i>{{ course.lesson_count }} جلسه</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                            {% if course.is_free %}
+                            <span class="fw-bold text-primary fs-5">رایگان</span>
+                            {% else %}
+                            <span class="fw-bold text-success fs-5">{{ course.formatted_price }} <small class="fs-6 fw-normal">تومان</small></span>
+                            {% endif %}
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'courses:cart_add' course.slug %}?next=/"
+                                   class="btn btn-outline-success btn-sm px-2" title="افزودن به سبد">
+                                    <i class="fas fa-cart-plus"></i>
+                                </a>
+                                <a href="{{ course.get_absolute_url }}" class="btn btn-primary btn-sm px-3 fw-medium">
+                                    مشاهده
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-book-open fa-4x text-muted mb-3 opacity-50"></i>
+            <h4 class="text-muted">هنوز دوره‌ای منتشر نشده</h4>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- بنر مقالات -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h3 class="fw-bold mb-2">مقالات آموزشی برنس آکادمی</h3>
+                <p class="text-muted mb-0">جدیدترین مطالب، ترفندها و آموزش‌های رایگان در حوزه برنامه‌نویسی</p>
+            </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <a href="{% url 'blog:list' %}" class="btn btn-outline-primary btn-lg fw-bold px-4">
+                    <i class="fas fa-newspaper me-2"></i>خواندن مقالات
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

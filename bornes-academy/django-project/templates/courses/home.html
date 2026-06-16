@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}دوره‌های آموزشی — برنس آکادمی{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold mb-3">یادگیری حرفه‌ای با برنس آکادمی</h1>
+        <p class="lead mb-4">دوره‌های آموزشی با کیفیت بالا در حوزه فناوری اطلاعات</p>
+        <a href="#courses" class="btn btn-light btn-lg fw-bold px-5">مشاهده دوره‌ها</a>
+    </div>
+</section>
+
+<section id="courses" class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold mb-0">دوره‌های موجود</h2>
+            <span class="badge bg-primary fs-6">{{ courses|length }} دوره</span>
+        </div>
+
+        {% if courses %}
+        <div class="row g-4">
+            {% for course in courses %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100">
+                    {% if course.thumbnail %}
+                    <img src="{{ course.thumbnail.url }}" class="course-thumbnail" alt="{{ course.title }}">
+                    {% else %}
+                    <div class="course-thumbnail bg-gradient d-flex align-items-center justify-content-center"
+                         style="background: linear-gradient(135deg, #0d6efd22, #0d6efd44);">
+                        <i class="fas fa-play-circle fa-4x text-primary opacity-50"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <span class="badge bg-secondary">
+                                {{ course.get_level_display }}
+                            </span>
+                            <small class="text-muted">
+                                <i class="fas fa-clock me-1"></i>{{ course.duration_hours }} ساعت
+                            </small>
+                        </div>
+                        <h5 class="card-title fw-bold">{{ course.title }}</h5>
+                        <p class="card-text text-muted flex-grow-1">
+                            {{ course.description|truncatechars:120 }}
+                        </p>
+                        <div class="mt-2 mb-3">
+                            <small class="text-muted">
+                                <i class="fas fa-chalkboard-teacher me-1"></i>{{ course.instructor }}
+                            </small>
+                            <br>
+                            <small class="text-muted">
+                                <i class="fas fa-layer-group me-1"></i>{{ course.lesson_count }} جلسه
+                            </small>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            {% if course.is_free %}
+                            <span class="free-tag">رایگان</span>
+                            {% else %}
+                            <span class="price-tag">{{ course.formatted_price }} تومان</span>
+                            {% endif %}
+                            <a href="{{ course.get_absolute_url }}" class="btn btn-primary btn-buy">
+                                مشاهده دوره
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-book-open fa-4x text-muted mb-3"></i>
+            <h4 class="text-muted">هنوز دوره‌ای اضافه نشده است</h4>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

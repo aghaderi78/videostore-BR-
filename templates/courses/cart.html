@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}سبد خرید — برنس آکادمی{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="fw-bold mb-4"><i class="fas fa-shopping-cart me-2 text-success"></i>سبد خرید</h2>
+
+    {% if items %}
+    <div class="row g-4">
+        <div class="col-lg-8">
+            {% for item in items %}
+            <div class="card p-4 mb-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="bg-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                             style="width:56px;height:56px;">
+                            <i class="fas fa-play text-white fa-lg"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1">{{ item.title }}</h6>
+                            <small class="text-muted"><i class="fas fa-chalkboard-teacher me-1"></i>{{ item.instructor }}</small>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <div class="price-tag mb-2">{{ item.price|floatformat:"0" }} تومان</div>
+                        <a href="{% url 'courses:cart_remove' item.course_id %}"
+                           class="btn btn-sm btn-outline-danger">
+                            <i class="fas fa-trash me-1"></i>حذف
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            <a href="{% url 'courses:home' %}" class="btn btn-outline-primary mt-2">
+                <i class="fas fa-plus me-2"></i>افزودن دوره دیگر
+            </a>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card p-4">
+                <h5 class="fw-bold mb-4">خلاصه سفارش</h5>
+                <div class="d-flex justify-content-between mb-2 text-muted">
+                    <span>تعداد دوره‌ها</span>
+                    <span>{{ items|length }} دوره</span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between fw-bold fs-5 mb-4">
+                    <span>جمع کل</span>
+                    <span class="text-success">{{ total_price|floatformat:"0" }} تومان</span>
+                </div>
+
+                {% if user.is_authenticated %}
+                <a href="{% url 'courses:cart_checkout' %}" class="btn btn-success w-100 btn-lg fw-bold">
+                    <i class="fas fa-credit-card me-2"></i>پرداخت و ثبت‌نام
+                </a>
+                {% else %}
+                <a href="{% url 'accounts:send_otp' %}?next={% url 'courses:cart' %}" class="btn btn-primary w-100 btn-lg fw-bold">
+                    <i class="fas fa-sign-in-alt me-2"></i>ورود برای پرداخت
+                </a>
+                {% endif %}
+
+                <div class="mt-3 text-center text-muted small">
+                    <i class="fas fa-shield-alt me-1"></i>پرداخت امن
+                    <i class="fas fa-lock me-1 ms-2"></i>SSL
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="fas fa-shopping-cart fa-5x text-muted mb-4" style="opacity:0.3;"></i>
+        <h4 class="text-muted mb-3">سبد خرید شما خالی است</h4>
+        <p class="text-muted">دوره‌های مورد علاقه‌تان را به سبد خرید اضافه کنید</p>
+        <a href="{% url 'courses:home' %}" class="btn btn-primary btn-lg fw-bold mt-2">
+            <i class="fas fa-book me-2"></i>مشاهده دوره‌ها
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
